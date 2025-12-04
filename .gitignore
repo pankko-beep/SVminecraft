@@ -1,0 +1,19 @@
+# Node 
+node_modules/
+.env
+
+#Logs
+npm-debug.log*
+logs/
+
+#Java
+*.class
+target/
+
+#IDE
+.vscode/
+.idea/
+
+#Sistema
+.DS_Store
+Thumbs.db

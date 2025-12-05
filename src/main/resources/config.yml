@@ -1,0 +1,46 @@
+# SVMinecraft - configuração otimizada
+# Este arquivo contém ajustes que influenciam desempenho e comportamentos do plugin.
+# As configurações aqui são seguras para a maioria dos servidores; ajuste conforme necessário.
+
+# Versão da configuração, útil para migrações futuras
+config-version: 1
+
+database:
+  # Nome do arquivo do DB (relativo à pasta do plugin)
+  file: svminecraft.db
+  # Ativar WAL mode para melhor concorrência e desempenho de escrita
+  wal: true
+  # Nível de sincronização. Pode ser "FULL", "NORMAL" ou "OFF" — "NORMAL" é um bom compromisso
+  synchronous: NORMAL
+  # Tempo de espera (ms) para operações quando o DB está ocupado
+  busy-timeout-ms: 5000
+
+# Autosave: salva estado em intervalos regulares (em segundos). 0 para desativar.
+autosave:
+  enabled: true
+  interval-seconds: 300 # 5 minutos
+
+# Módulos que devem ser ativados. Desabilite módulos que não estiver usando para reduzir overhead.
+modules:
+  objetivos: true
+  loja: true
+  painelhud: true
+  ranks: true
+  times: true
+  vip: true
+  escudobase: true
+
+# Perf tuning extras
+performance:
+  # Habilita gravação imediata ao atualizar o progresso/rank (faz gravações assíncronas). Mantê-lo true evita perda de progresso.
+  save-on-change: true
+  # Número máximo de segundos a aguardar em shutdown por saves pendentes antes de forçar fim
+  shutdown-wait-seconds: 8
+
+messages:
+  # Mensagens padrão (PT-BR)
+  autosave_started: "Salvamento periódico iniciado (cada %d segundos)."
+  autosave_completed: "Autosave completo (%d módulos salvos)."
+  autosave_disabled: "Autosave desativado."
+  migrating_config: "Migrando dados legados do config para o banco de dados..."
+  migrating_done: "Migração completa."

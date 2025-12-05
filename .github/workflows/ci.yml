@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Build and run unit tests
+        run: mvn -B -DskipTests=false test package
+
+      - name: Generate test coverage report (JaCoCo)
+        run: mvn -B jacoco:report
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Run Integration tests (MockBukkit)
+        # this job runs the integration profile which adds MockBukkit and runs Failsafe ITs
+        run: mvn -B -Pintegration -DskipTests=false integration-test verify

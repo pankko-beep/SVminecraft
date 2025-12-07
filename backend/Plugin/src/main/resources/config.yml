@@ -1,0 +1,81 @@
+# Configuração Nexus
+versao-config: 1
+
+moeda-nome: "moedas"
+limites:
+  pagar:
+    max-por-transacao: 500000
+    cooldown-segundos: 10
+  time:
+    custo-troca: 1000000
+
+auditoria:
+  historico-por-jogador: 30
+  salvar-intervalo-segundos: 60
+
+painel:
+  usar-decent-holograms: true
+  arquivo-persistencia: panels.json
+  refresh-segundos: 30
+  metricas:
+    janela-minutos: 60
+    top: 6
+  texto:
+    titulo-global: "§bNexus — Global"
+    titulo-time: "§eNexus — Time"
+    titulo-guilda: "§aNexus — Guilda"
+
+modulos:
+  economia: true
+  times: true
+  guildas: true
+  paineis: true
+  auditoria: true
+  transacoes: true
+  login: true
+
+storage:
+  tipo: sqlite # sqlite | mysql
+  sqlite:
+    arquivo: database.db
+  mysql:
+    host: 127.0.0.1
+    porta: 3306
+    database: nexus
+    usuario: root
+    senha: ""
+    parametros: "useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8"
+
+mensagens:
+  prefixo: "§7[§bNexus§7] §r"
+  sem-permissao: "§cVocê não tem permissão."
+  jogador-nao-encontrado: "§cJogador não encontrado."
+  valor-invalido: "§cValor inválido."
+  saldo: "§aSeu saldo: §e%valor% %moeda%"
+  pagar-sucesso: "§aVocê pagou §e%valor% §apara §e%alvo%§a."
+  pagar-recebido: "§aVocê recebeu §e%valor% §ade §e%origem%§a."
+  pagar-limite: "§cLimite por transação: §e%limite% %moeda%."
+  pagar-cooldown: "§cAguarde §e%seg%§cs para nova transferência."
+  time-escolher-uso: "§7Use: §e/time escolher <Solar|Lunar>§7."
+  time-definido: "§aVocê agora é do time %time_color%%time%§r§a!"
+  time-ja-definido: "§cVocê já possui um time."
+  time-troca-custo: "§7Trocar custa §e%custo% %moeda%§7. Confirme: §e/time trocar confirmar§7."
+  time-sem-saldo: "§cSaldo insuficiente para trocar de time."
+  time-trocado: "§aVocê trocou para o time %time_color%%time%§r§a."
+  guild-criada: "§aGuilda §e%nome% §acriada."
+  guild-ja-existe: "§cJá existe uma guilda com esse nome."
+  guild-sem-guilda: "§cVocê não pertence a uma guilda."
+  guild-ja-possui: "§cVocê já possui/participa de uma guilda."
+  guild-convite-enviado: "§aConvite enviado para §e%jogador%§a."
+  guild-convite-recebido: "§aVocê foi convidado para a guilda §e%guild%§a. Use §e/guild aceitar§a."
+  guild-entrada: "§a%jogador% entrou na guilda."
+  guild-saida: "§e%jogador% §asaiu da guilda."
+  fly-ativado: "§aVoo ativado."
+  fly-desativado: "§cVoo desativado."
+  econ-freeze-on: "§cEconomia congelada para §e%jogador%§c."
+  econ-freeze-off: "§aEconomia liberada para §e%jogador%§a."
+  painel-criado: "§aPainel criado: §e%id%§a."
+  painel-deletado: "§cPainel deletado: §e%id%§c."
+  time-escolha-obrigatoria: "§cEscolha seu time para começar a jogar: §e/time escolher <Solar|Lunar>§c."
+  time-cor-solar: "§e"
+  time-cor-lunar: "§5"

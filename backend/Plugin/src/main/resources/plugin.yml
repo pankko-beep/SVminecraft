@@ -1,0 +1,76 @@
+name: Nexus
+version: 0.1.0-SNAPSHOT
+main: br.com.nexus.NexusPlugin
+api-version: 1.20
+load: POSTWORLD
+softdepend:
+  - Vault
+  - DecentHolograms
+  - Essentials
+  - LuckPerms
+  - SimpleLogin
+  - EconomyShopGUI
+  - spark
+  - CombatLogX
+  - PvPManager
+  - PlayerLevels
+  - UltraLevels
+  - Shopkeepers
+  - TradeSystem
+  - VotingPlugin
+  - CrateReloaded
+  - CosmeticsCore
+  - EliteMobs
+  - WildStacker
+commands:
+  saldo:
+    description: Consulta seu saldo de moedas Nexus.
+    usage: /<command>
+    aliases: [dinheiro]
+    permission: nexus.saldo
+  pagar:
+    description: Transfere moedas para outro jogador.
+    usage: /<command> <jogador> <quantia>
+    permission: nexus.pagar
+  historico:
+    description: Exibe seu histórico recente de transações.
+    usage: /<command>
+    permission: nexus.historico
+  time:
+    description: Comandos de time (Solar/Lunar).
+    usage: /<command> <escolher|trocar> [Solar|Lunar]
+    permission: nexus.time
+  guild:
+    description: Comandos de guilda (criar, convidar, aceitar, sair).
+    usage: /<command> <criar|convidar|aceitar|sair> [args]
+    permission: nexus.guild
+  fly:
+    description: Alterna voo (admin).
+    usage: /<command>
+    permission: server.fly
+  econ:
+    description: Administração econômica (freeze, audit, rollback).
+    usage: /<command> <freeze|audit|rollback> [args]
+    permission: economia.admin
+  auditoria:
+    description: Consulta e exporta eventos de auditoria do banco.
+    usage: /<command> <listar|export> [args]
+    permission: auditoria.admin
+  painel:
+    description: Gerencia painéis (Global/Time/Guilda).
+    usage: /<command> <criar|criar-guilda|deletar|listar|tp|info|refresh|realign> [args]
+    permission: paineis.admin
+  _transacoes:
+    description: Consulta transações no banco com filtros.
+    usage: /<command> <listar|export> [args]
+    permission: economia.admin
+permissions:
+  nexus.saldo: { default: true }
+  nexus.pagar: { default: true }
+  nexus.historico: { default: true }
+  nexus.time: { default: true }
+  nexus.guild: { default: true }
+  server.fly: { default: op }
+  economia.admin: { default: op }
+  paineis.admin: { default: op }
+  auditoria.admin: { default: op }

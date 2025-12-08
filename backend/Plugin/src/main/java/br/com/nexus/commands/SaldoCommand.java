@@ -27,7 +27,7 @@ public class SaldoCommand implements CommandExecutor {
         }
         double bal = plugin.economy().getBalance(p);
         String moeda = plugin.getConfig().getString("moeda-nome", "moedas");
-        sender.sendMessage(prefix() + msg("saldo").replace("%valor%", String.format("%.2f", bal)).replace("%moeda%", moeda));
+        sender.sendMessage(prefix() + msg("saldo").replace("%valor%", "%.2f".formatted(bal)).replace("%moeda%", moeda));
         return true;
     }
 

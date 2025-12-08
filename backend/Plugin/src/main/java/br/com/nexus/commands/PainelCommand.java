@@ -70,8 +70,8 @@ public class PainelCommand implements CommandExecutor {
             sender.sendMessage(prefix()+"Tipo: "+p.type);
             if (p.type == PanelService.Type.GUILDA && p.guildName != null) sender.sendMessage(prefix()+"Guilda: "+p.guildName);
             sender.sendMessage(prefix()+"Mundo: "+loc.getWorld().getName());
-            sender.sendMessage(prefix()+String.format("Posição: x=%.2f y=%.2f z=%.2f", loc.getX(), loc.getY(), loc.getZ()));
-            sender.sendMessage(prefix()+String.format("Orientação: yaw=%.1f pitch=%.1f", loc.getYaw(), loc.getPitch()));
+            sender.sendMessage(prefix()+"Posição: x=%.2f y=%.2f z=%.2f".formatted(loc.getX(), loc.getY(), loc.getZ()));
+            sender.sendMessage(prefix()+"Orientação: yaw=%.1f pitch=%.1f".formatted(loc.getYaw(), loc.getPitch()));
             // Entidades vinculadas (hologramas/TextDisplay) são gerenciadas internamente.
             return true;
         }

@@ -66,9 +66,9 @@ public class PanelService {
         if (useDH) {
             String name = "nexus_" + p.id;
             // Cria e posiciona explicitamente no mundo
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("dh create %s", name));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh create %s".formatted(name));
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(Locale.ROOT, "dh setlocation %s %s %f %f %f", name, p.loc.getWorld().getName(), p.loc.getX(), p.loc.getY(), p.loc.getZ()));
-            for (String line : lines) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("dh addline %s %s", name, line));
+            for (String line : lines) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh addline %s %s".formatted(name, line));
             return;
         }
         // Fallback: TextDisplay estável, sem rotação inclinada
@@ -96,7 +96,7 @@ public class PanelService {
             long after = System.currentTimeMillis() - mins*60_000L;
             Map<String,Integer> counts = plugin.audit().countByType(after, top);
             int total = 0; for (int v : counts.values()) total += v;
-            lines.add(String.format("§7Últimos %d min — total §f%d", mins, total));
+            lines.add("§7Últimos %d min — total §f%d".formatted(mins, total));
             for (Map.Entry<String,Integer> en : counts.entrySet()) lines.add("§b• §f"+en.getKey()+": §e"+en.getValue());
             if (counts.isEmpty()) lines.add("§7Sem eventos no período.");
         } else if (p.type == Type.TIME) {
@@ -106,7 +106,7 @@ public class PanelService {
             // Para exemplo, mostramos contadores para ambos os times
             var solar = plugin.audit().countForTeam("SOLAR", after, top);
             var lunar = plugin.audit().countForTeam("LUNAR", after, top);
-            lines.add(String.format("§7Últimos %d min", mins));
+            lines.add("§7Últimos %d min".formatted(mins));
             lines.add("§eSolar:");
             if (solar.isEmpty()) lines.add("§7  — sem eventos"); else for (var en : solar.entrySet()) lines.add("§b  • §f"+en.getKey()+": §e"+en.getValue());
             lines.add("§9Lunar:");
@@ -116,14 +116,14 @@ public class PanelService {
             int top = plugin.getConfig().getInt("painel.metricas.top", 6);
             long after = System.currentTimeMillis() - mins*60_000L;
             if (p.guildName != null) {
-                lines.add(String.format("§7Guilda §f%s §7— últimos %d min", p.guildName, mins));
+                lines.add("§7Guilda §f%s §7— últimos %d min".formatted(p.guildName, mins));
                 Map<String,Integer> counts = plugin.audit().countForGuild(p.guildName, after, top);
                 for (Map.Entry<String,Integer> en : counts.entrySet()) lines.add("§b• §f"+en.getKey()+": §e"+en.getValue());
                 if (counts.isEmpty()) lines.add("§7Sem eventos no período.");
                 return lines;
             }
             // fallback: geral por tipo
-            lines.add(String.format("§7Últimos %d min — eventos (top %d)", mins, top));
+            lines.add("§7Últimos %d min — eventos (top %d)".formatted(mins, top));
             Map<String,Integer> counts = plugin.audit().countByType(after, top);
             for (Map.Entry<String,Integer> en : counts.entrySet()) lines.add("§b• §f"+en.getKey()+": §e"+en.getValue());
             if (counts.isEmpty()) lines.add("§7Sem eventos no período.");
@@ -142,17 +142,17 @@ public class PanelService {
         if (useDH) {
             String name = "nexus_" + p.id;
             // Recria para garantir atualização
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("dh delete %s", name));
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("dh create %s", name));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh delete %s".formatted(name));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh create %s".formatted(name));
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(Locale.ROOT, "dh setlocation %s %s %f %f %f", name, p.loc.getWorld().getName(), p.loc.getX(), p.loc.getY(), p.loc.getZ()));
-            for (String line : lines) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("dh addline %s %s", name, line));
+            for (String line : lines) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh addline %s %s".formatted(name, line));
             return;
         }
         UUID id = displayIds.get(p.id);
         TextDisplay td = null;
         if (id != null) {
             var ent = plugin.getServer().getEntity(id);
-            if (ent instanceof TextDisplay) td = (TextDisplay) ent;
+            if (ent instanceof TextDisplay display) td = display;
         }
         if (td == null) { spawn(p, lines); return; }
         td.setText(String.join("\n", lines));

@@ -61,7 +61,7 @@ public class TransacoesCommand implements CommandExecutor {
                 while (rs.next()) {
                     long ts = rs.getLong(1); String id = rs.getString(2); String from = rs.getString(3); String to = rs.getString(4);
                     double amount = rs.getDouble(5); String note = rs.getString(6);
-                    sender.sendMessage(String.format("§7[%tF %tT] §f%s §7%s->%s §e%.2f §7(%s)", ts, ts, id, shortUuid(from), shortUuid(to), amount, note));
+                    sender.sendMessage("§7[%tF %tT] §f%s §7%s->%s §e%.2f §7(%s)".formatted(ts, ts, id, shortUuid(from), shortUuid(to), amount, note));
                 }
             }
         } catch (Exception e) { sender.sendMessage(prefix()+"§cFalha ao consultar: "+e.getMessage()); }
@@ -71,7 +71,7 @@ public class TransacoesCommand implements CommandExecutor {
         long after = System.currentTimeMillis() - (minutos==null?0:minutos*60_000L);
         String sql = "SELECT ts, id, from_uuid, to_uuid, amount, note FROM transactions WHERE ts>=?" + (noteLike!=null?" AND note LIKE ?":"") + " ORDER BY ts DESC LIMIT ?";
         File outDir = new File(plugin.getDataFolder(), "exports"); if (!outDir.exists()) outDir.mkdirs();
-        File outFile = new File(outDir, String.format("transactions_%d.%s", System.currentTimeMillis(), formato.equals("csv")?"csv":"json"));
+        File outFile = new File(outDir, "transactions_%d.%s".formatted(System.currentTimeMillis(), formato.equals("csv") ? "csv" : "json"));
         try (Connection c = plugin.database().getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             int i=1; ps.setLong(i++, after);
             if (noteLike != null) ps.setString(i++, "%"+noteLike+"%");

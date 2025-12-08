@@ -81,7 +81,7 @@ public class AuditoriaCommand implements CommandExecutor {
                     String tt = rs.getString(5);
                     String tid = rs.getString(6);
                     String dj = rs.getString(7);
-                    sender.sendMessage(String.format("§7[%tF %tT] §b%s§7 actor=%s(%s) target=%s:%s data=%s", ts, ts, t, an, au, tt, tid, summarize(dj)));
+                    sender.sendMessage("§7[%tF %tT] §b%s§7 actor=%s(%s) target=%s:%s data=%s".formatted(ts, ts, t, an, au, tt, tid, summarize(dj)));
                 }
             }
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class AuditoriaCommand implements CommandExecutor {
         long after = System.currentTimeMillis() - (minutos == null ? 0 : minutos * 60_000L);
         String sql = "SELECT ts,type,actor_uuid,actor_name,target_type,target_id,data_json FROM audit_events WHERE ts>=?" + (tipo!=null?" AND type=?":"") + " ORDER BY ts DESC LIMIT ?";
         File outDir = new File(plugin.getDataFolder(), "exports"); if (!outDir.exists()) outDir.mkdirs();
-        File outFile = new File(outDir, String.format("audit_%s_%d.%s", tipo==null?"all":tipo.replace(':','_'), System.currentTimeMillis(), formato.equals("csv")?"csv":"json"));
+        File outFile = new File(outDir, "audit_%s_%d.%s".formatted(tipo == null ? "all" : tipo.replace(':', '_'), System.currentTimeMillis(), formato.equals("csv") ? "csv" : "json"));
         try (Connection c = plugin.database().getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             int i=1; ps.setLong(i++, after);
             if (tipo != null) ps.setString(i++, tipo);

@@ -31,7 +31,7 @@ public class DatabaseService {
             String user = plugin.getConfig().getString("storage.mysql.usuario", "root");
             String pass = plugin.getConfig().getString("storage.mysql.senha", "");
             String params = plugin.getConfig().getString("storage.mysql.parametros", "useSSL=false");
-            String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s?%s", host, porta, db, params);
+            String jdbcUrl = "jdbc:mysql://%s:%d/%s?%s".formatted(host, porta, db, params);
             cfg.setJdbcUrl(jdbcUrl);
             cfg.setUsername(user);
             cfg.setPassword(pass);

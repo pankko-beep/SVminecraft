@@ -52,8 +52,8 @@ public class PagarCommand implements CommandExecutor {
             plugin.audit().log("economia.transfer", p.getUniqueId(), p.getName(), "player", String.valueOf(alvo.getUniqueId()),
                     Map.of("amount", quantia, "to", String.valueOf(alvo.getUniqueId())));
             String moeda = plugin.getConfig().getString("moeda-nome", "moedas");
-            p.sendMessage(prefix()+msg("pagar-sucesso").replace("%valor%", String.format("%.2f", quantia)).replace("%alvo%", alvo.getName()==null?"?":alvo.getName()));
-            if (alvo.isOnline()) Objects.requireNonNull(alvo.getPlayer()).sendMessage(prefix()+msg("pagar-recebido").replace("%valor%", String.format("%.2f", quantia)).replace("%origem%", p.getName()));
+            p.sendMessage(prefix()+msg("pagar-sucesso").replace("%valor%", "%.2f".formatted(quantia)).replace("%alvo%", alvo.getName()==null?"?":alvo.getName()));
+            if (alvo.isOnline()) Objects.requireNonNull(alvo.getPlayer()).sendMessage(prefix()+msg("pagar-recebido").replace("%valor%", "%.2f".formatted(quantia)).replace("%origem%", p.getName()));
         } else {
             p.sendMessage(prefix()+"§cFalha ao debitar. Saldo insuficiente?");
         }

@@ -26,7 +26,7 @@ public class HistoricoCommand implements CommandExecutor {
         for (TransactionService.Entry e : list) {
             String dir = e.from.equals(p.getUniqueId()) ? "-" : "+";
             String other = e.from.equals(p.getUniqueId()) ? e.to.toString() : e.from.toString();
-            sender.sendMessage(String.format("§7[%s] §f%s §e%.2f §7(%s)", df.format(new Date(e.time)), dir, e.amount, e.note));
+            sender.sendMessage("§7[%s] §f%s §e%.2f §7(%s)".formatted(df.format(new Date(e.time)), dir, e.amount, e.note));
         }
         return true;
     }

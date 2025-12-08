@@ -1,9 +1,7 @@
 package br.com.nexus.listeners;
 
 import br.com.nexus.NexusPlugin;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Hook para SimpleLogin pós-autenticação. Usa reflexão para evitar dependência de compile.
@@ -13,22 +11,34 @@ import org.bukkit.plugin.Plugin;
 public class SimpleLoginHook implements Listener {
     private final NexusPlugin plugin;
 
-    public SimpleLoginHook(NexusPlugin plugin) { this.plugin = plugin; }
-
-    @EventHandler
-    public void onAuth(org.bukkit.event.Event e) {
+    public SimpleLoginHook(NexusPlugin plugin) {
+        this.plugin = plugin;
+        // Registrar evento dinamicamente via reflexão
         try {
-            // Detecta classe do evento por nome
-            if (!e.getClass().getName().toLowerCase().contains("authenticate")) return;
-            // Tenta acessar getPlayer() via reflexão
-            var m = e.getClass().getMethod("getPlayer");
-            Object playerObj = m.invoke(e);
-            if (playerObj instanceof org.bukkit.entity.Player p) {
-                long now = System.currentTimeMillis();
-                plugin.players().touch(p.getUniqueId(), p.getName(), now);
-                plugin.players().saveNow();
-                plugin.getLogger().info("SimpleLogin auth registrado para "+p.getName());
-            }
-        } catch (Exception ignored) { }
+            @SuppressWarnings("unchecked")
+            Class<? extends org.bukkit.event.Event> eventClass = 
+                (Class<? extends org.bukkit.event.Event>) Class.forName("de.xxschrandxx.api.events.PlayerAuthenticateEvent");
+            
+            plugin.getServer().getPluginManager().registerEvent(
+                eventClass, 
+                this, 
+                org.bukkit.event.EventPriority.MONITOR,
+                (listener, event) -> {
+                    try {
+                        var m = event.getClass().getMethod("getPlayer");
+                        Object playerObj = m.invoke(event);
+                        if (playerObj instanceof org.bukkit.entity.Player p) {
+                            long now = System.currentTimeMillis();
+                            plugin.players().touch(p.getUniqueId(), p.getName(), now);
+                            plugin.players().saveNow();
+                        }
+                    } catch (Exception ignored) { }
+                },
+                plugin
+            );
+            plugin.getLogger().info("Hook SimpleLogin registrado.");
+        } catch (ClassNotFoundException e) {
+            plugin.getLogger().info("Evento SimpleLogin não encontrado; hook não registrado.");
+        }
     }
 }

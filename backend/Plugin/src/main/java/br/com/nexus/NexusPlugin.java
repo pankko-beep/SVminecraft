@@ -62,9 +62,9 @@ public class NexusPlugin extends JavaPlugin {
         // Registrar listeners
         if (mLogin) getServer().getPluginManager().registerEvents(new PlayerLifecycleListener(this), this);
         if (mTimes) getServer().getPluginManager().registerEvents(new br.com.nexus.listeners.NoTeamMovementListener(this), this);
+        // Hook SimpleLogin (registra-se dinamicamente no construtor)
         if (mLogin && getServer().getPluginManager().isPluginEnabled("SimpleLogin")) {
-            getServer().getPluginManager().registerEvents(new SimpleLoginHook(this), this);
-            getLogger().info("Hook SimpleLogin ativo.");
+            new SimpleLoginHook(this);
         }
         // Hook AuthMe (opcional, via reflexão)
         if (mLogin) {

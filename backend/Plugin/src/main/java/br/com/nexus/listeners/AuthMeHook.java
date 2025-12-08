@@ -18,8 +18,9 @@ public class AuthMeHook implements Listener {
         PluginManager pm = plugin.getServer().getPluginManager();
         // LoginEvent
         try {
-            Class<?> loginEventClass = Class.forName("fr.xephi.authme.events.LoginEvent");
-            pm.registerEvent((Class<? extends Event>) loginEventClass, this, EventPriority.MONITOR, (listener, event) -> {
+            @SuppressWarnings("unchecked")
+            Class<? extends Event> loginEventClass = (Class<? extends Event>) Class.forName("fr.xephi.authme.events.LoginEvent");
+            pm.registerEvent(loginEventClass, this, EventPriority.MONITOR, (listener, event) -> {
                 try {
                     Method getPlayer = loginEventClass.getMethod("getPlayer");
                     Object playerObj = getPlayer.invoke(event);
@@ -40,8 +41,9 @@ public class AuthMeHook implements Listener {
 
         // LogoutEvent
         try {
-            Class<?> logoutEventClass = Class.forName("fr.xephi.authme.events.LogoutEvent");
-            pm.registerEvent((Class<? extends Event>) logoutEventClass, this, EventPriority.MONITOR, (listener, event) -> {
+            @SuppressWarnings("unchecked")
+            Class<? extends Event> logoutEventClass = (Class<? extends Event>) Class.forName("fr.xephi.authme.events.LogoutEvent");
+            pm.registerEvent(logoutEventClass, this, EventPriority.MONITOR, (listener, event) -> {
                 try {
                     Method getPlayer = logoutEventClass.getMethod("getPlayer");
                     Object playerObj = getPlayer.invoke(event);

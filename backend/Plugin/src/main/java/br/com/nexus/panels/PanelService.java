@@ -61,14 +61,20 @@ public class PanelService {
 
     private void spawn(Panel p, List<String> lines) {
         // Se DecentHolograms estiver presente e configurado, poderíamos delegar.
-        boolean useDH = plugin.getConfig().getBoolean("painel.usar-decent-holograms", true)
+        boolean useDH = plugin.getConfig().getBoolean("painel.usar-decent-holograms", false)
                 && plugin.getServer().getPluginManager().isPluginEnabled("DecentHolograms");
         if (useDH) {
+            // DecentHolograms support - usando comandos corretos da API v2.9.8
             String name = "nexus_" + p.id;
-            // Cria e posiciona explicitamente no mundo
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh create %s".formatted(name));
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(Locale.ROOT, "dh setlocation %s %s %f %f %f", name, p.loc.getWorld().getName(), p.loc.getX(), p.loc.getY(), p.loc.getZ()));
-            for (String line : lines) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh addline %s %s".formatted(name, line));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh create " + name);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(Locale.ROOT, 
+                "dh line add %s %s %.2f %.2f %.2f", 
+                name, p.loc.getWorld().getName(), p.loc.getX(), p.loc.getY(), p.loc.getZ()));
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
+                    String.format("dh line set %s %d %s", name, i + 1, line));
+            }
             return;
         }
         // Fallback: TextDisplay estável, sem rotação inclinada
@@ -135,17 +141,23 @@ public class PanelService {
         for (Panel p : panels.values()) refresh(p);
     }
 
+    public void realignPanel(String id) {
+        Panel p = panels.get(id);
+        if (p != null) refresh(p);
+    }
+
     private void refresh(Panel p) {
         List<String> lines = linesFor(p);
-        boolean useDH = plugin.getConfig().getBoolean("painel.usar-decent-holograms", true)
+        boolean useDH = plugin.getConfig().getBoolean("painel.usar-decent-holograms", false)
                 && plugin.getServer().getPluginManager().isPluginEnabled("DecentHolograms");
         if (useDH) {
             String name = "nexus_" + p.id;
-            // Recria para garantir atualização
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh delete %s".formatted(name));
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh create %s".formatted(name));
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(Locale.ROOT, "dh setlocation %s %s %f %f %f", name, p.loc.getWorld().getName(), p.loc.getX(), p.loc.getY(), p.loc.getZ()));
-            for (String line : lines) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dh addline %s %s".formatted(name, line));
+            // Limpa linhas antigas e adiciona novas
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
+                    String.format("dh line set %s %d %s", name, i + 1, line));
+            }
             return;
         }
         UUID id = displayIds.get(p.id);

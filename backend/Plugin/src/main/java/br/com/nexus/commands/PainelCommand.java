@@ -80,7 +80,27 @@ public class PainelCommand implements CommandExecutor {
             sender.sendMessage(prefix()+"§aPainéis atualizados.");
             return true;
         }
-        // Simples: tp/info/realign podem ser implementados depois
+        if (sub.equals("tp")) {
+            if (!(sender instanceof Player p)) { sender.sendMessage("Apenas jogadores."); return true; }
+            if (args.length < 2) { sender.sendMessage(prefix()+"Uso: /painel tp <id>"); return true; }
+            String id = args[1];
+            var panel = plugin.panels().all().get(id);
+            if (panel == null) { sender.sendMessage(prefix()+"§cPainel não encontrado: "+id); return true; }
+            p.teleport(panel.loc);
+            sender.sendMessage(prefix()+"§aTeleportado para o painel "+id);
+            plugin.audit().log("panel.tp", p.getUniqueId(), p.getName(), "panel", id, Map.of());
+            return true;
+        }
+        if (sub.equals("realign")) {
+            if (args.length < 2) { sender.sendMessage(prefix()+"Uso: /painel realign <id>"); return true; }
+            String id = args[1];
+            var panel = plugin.panels().all().get(id);
+            if (panel == null) { sender.sendMessage(prefix()+"§cPainel não encontrado: "+id); return true; }
+            plugin.panels().realignPanel(id);
+            sender.sendMessage(prefix()+"§aPainel "+id+" realinhado.");
+            plugin.audit().log("panel.realign", (sender instanceof Player pl)? pl.getUniqueId(): null, sender.getName(), "panel", id, Map.of());
+            return true;
+        }
         sender.sendMessage(prefix()+"Subcomando não implementado nesta versão.");
         return true;
     }
